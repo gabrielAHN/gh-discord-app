@@ -1,51 +1,21 @@
-# React + TypeScript + Vite
+# Discord React Vite App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/qI6MGp)
 
-Currently, two official plugins are available:
+This is a react app gives an alternative dashboard to actively look into discord channels of your choosing.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+It allows for thread replies and replying back and forth within each thread. And quick search for messages or people within each channel.
 
-## Expanding the ESLint configuration
+Dev Tools 🛠
+- [Vite](https://vitejs.dev/)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Data Requests 📀
+- [tanstack/query](https://tanstack.com/query)
+- [react-router](https://reactrouter.com/en/main)
 
-- Configure the top-level `parserOptions` property like this:
+Styling 🎨
+- [Tailwindcss](https://tailwindcss.com/)
+- [Shadcn](https://ui.shadcn.com/) 
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
-# gh-discord-app
+[To see more like this check me out](https://www.gabrielhn.com)
