@@ -118,6 +118,11 @@ function PopupMessage({ Data }: any) {
             Thread Reply
           </AccordionTrigger>
           <AccordionContent>
+              <div
+                className={`${divStyles} max-h-48 h-32 overflow-x-auto break-words`}
+              >
+                {Data.getMessageInfo.content}
+              </div>
             <MessageReply MessageReply={Data?.getMessageInfo} />
           </AccordionContent>
         </AccordionItem>

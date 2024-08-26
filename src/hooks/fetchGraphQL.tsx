@@ -8,7 +8,7 @@ async function fetchGraphQL(query: any, variables?: Record<string, any>) {
     body.variables = variables;
   }
   try {
-    const response = await fetch(`https://${VITE_API_URL}/graphql`, {
+    const response = await fetch(`${VITE_API_URL}/graphql`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

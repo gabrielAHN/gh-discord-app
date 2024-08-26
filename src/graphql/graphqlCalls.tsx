@@ -1,15 +1,7 @@
-export const CreateThread = `
-  mutation CreateThread(
-    $messageId: String!, $threadMessage: String!, 
-    $threadName: String!, $channelId: String!
-    ) {
-    CreateThread(
-      messageId: $messageId
-      threadMessage: $threadMessage
-      threadName: $threadName
-      channelId: $channelId
-    )
-  }
+export const LlamaCalls = `
+query GetAIAnswer($message: String!){
+  GetAIAnswer(message:$message)
+}
 `;
 
 export const getAllCategoryMessages = `
@@ -50,4 +42,18 @@ export const SendMessage = `
 mutation SendMessage($channelId: String!, $content: String!) {
   SendMessage(channelId: $channelId, content: $content)
 }
+`;
+
+export const CreateThread = `
+  mutation CreateThread(
+    $messageId: String!, $threadMessage: String!, 
+    $threadName: String!, $channelId: String!
+    ) {
+    CreateThread(
+      messageId: $messageId
+      threadMessage: $threadMessage
+      threadName: $threadName
+      channelId: $channelId
+    )
+  }
 `;

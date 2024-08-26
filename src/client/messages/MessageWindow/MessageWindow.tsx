@@ -48,11 +48,9 @@ function MessageWindow() {
 
   return isDesktop ? (
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent aria-describedby="" className="max-h-full w-full">
-          <DialogHeader>
-            <DialogTitle>Message</DialogTitle>
-            <Description />
-          </DialogHeader>
+        <DialogContent aria-describedby="message-description" className="max-h-full w-full">
+          <DialogTitle>Message</DialogTitle>
+          <Description />
           <Suspense fallback={<LoadingFallback />}>
             <Await
               resolve={MessageInfoData?.MessageData}

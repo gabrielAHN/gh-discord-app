@@ -13,22 +13,26 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { TableDataProps, Message } from "@/types/app.d";
 
 export function MessageTable({ TableData }: TableDataProps) {
-  const { data, isLoading, error, refetch } = TableData;
+  const { data, isLoading, error } = TableData;
   const navigate = useNavigate();
 
   const handleRowClick = (message: Message) => {
     navigate(`/messages/${message.messageId}`);
   };
 
+  const handleClick = async () => {
+    navigate(window.location.pathname, { replace: true });
+  };
+
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center h-full p-4 bg-red-100 rounded-lg">
+      <div className="flex flex-col m-4 items-center justify-center h-full p-4 bg-red-100 rounded-lg">
         <h1 className="text-2xl font-bold text-red-600 mb-2">
           Something went wrong
         </h1>
         <p className="text-lg text-red-500">{error.message}</p>
         <Button
-          onClick={() => refetch()}
+          onClick={handleClick}
           className="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
         >
           Try Again
