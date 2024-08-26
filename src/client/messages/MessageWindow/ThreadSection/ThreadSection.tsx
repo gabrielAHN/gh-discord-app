@@ -1,15 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import fetchGraphQL from "@/hooks/fetchGraphQL";
-import { SendMessage } from "@/graphql/graphqlCalls";
-
 import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { FiSend } from "react-icons/fi";
+import { SendMessage, LlamaCalls } from "@/graphql/graphqlCalls";
+import { LuBrainCircuit } from "react-icons/lu";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
 export const divStyles = "rounded-md border px-4 py-3 font-mono text-sm mb-2";
@@ -23,6 +24,7 @@ function ThreadSection({
 }) {
   const [isReplying, setIsReplying] = useState(false);
   const [replyText, setReplyText] = useState("");
+  const [isEditable, setIsEditable] = useState(true);
   const [isSending, setIsSending] = useState(false);
   const navigate = useNavigate();
 
@@ -37,6 +39,7 @@ function ThreadSection({
     onSuccess: () => {
       setReplyText("");
       setIsSending(false);
+      setIsReplying(false);
       navigate(0);
     },
     onError: (error) => {
@@ -45,19 +48,49 @@ function ThreadSection({
     },
   });
 
-  const handleReplyClick = () => {
-    setIsReplying(true);
-  };
+  const {
+    data: AiResponse,
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery({
+    queryKey: ["GetAIAnswer", ThreadData[0].content],
+    queryFn: () => fetchGraphQL(LlamaCalls, { message: ThreadData[0].content }),
+    enabled: false,
+  });
 
-  const handleSendClick = () => {
+  const handleReplyClick = useCallback(() => {
+    setIsReplying(true);
+  }, []);
+
+  const handleSendClick = useCallback(() => {
     setIsSending(true);
     mutation.mutate(replyText);
-  };
+  }, [replyText, mutation]);
 
-  const handleCancelClick = () => {
+  const handleCancelClick = useCallback(() => {
     setIsReplying(false);
     setReplyText("");
-  };
+  }, []);
+
+  const handleAIAttempt = useCallback(() => {
+    setReplyText("Loading AI response...");
+    setIsEditable(false);
+    refetch();
+  }, [refetch]);
+
+  useEffect(() => {
+    if (!isLoading && !isError && AiResponse) {
+      const aiMessage = AiResponse?.GetAIAnswer || "AI response received.";
+      setReplyText(aiMessage);
+      setIsEditable(true);
+    }
+
+    if (isError) {
+      setReplyText("Error in fetching AI response");
+      setIsEditable(true);
+    }
+  }, [AiResponse, isLoading, isError]);
 
   return (
     <AccordionItem value="item-3">
@@ -72,23 +105,50 @@ function ThreadSection({
           <div className="mb-4">
             <Textarea
               value={replyText}
-              onChange={(e) => setReplyText(e.target.value)}
+              onChange={(e) => {
+                if (isEditable) {
+                  setReplyText(e.target.value);
+                }
+              }}
               className="m-2 max-w-[95%] overflow-auto"
+              disabled={isLoading || !isEditable}
             />
             <div className="flex space-x-2">
               <Button
                 variant="outline"
                 onClick={handleSendClick}
-                disabled={isSending}
+                disabled={isSending || !isEditable}
+                className="flex-1 flex"
               >
-                {isSending ? "Sending..." : "Send"}
+                {isSending ? (
+                  "Sending..."
+                ) : (
+                  <>
+                    Send <FiSend className="ml-2" />
+                  </>
+                )}
               </Button>
               <Button
-                variant="secondary"
+                className="flex-1 flex "
+                variant="outline"
                 onClick={handleCancelClick}
-                disabled={isSending}
+                disabled={isSending||isLoading}
               >
                 Cancel
+              </Button>
+              <Button
+                variant="outline"
+                className="flex-1 flex"
+                onClick={handleAIAttempt}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  "Loading..."
+                ) : (
+                  <>
+                    <LuBrainCircuit className="mr-2" /> AI Attempt
+                  </>
+                )}
               </Button>
             </div>
           </div>
